@@ -1,581 +1,487 @@
----
-import ImageMod from "@/layouts/components/ImageMod.astro";
+﻿---
 import Base from "@/layouts/Base.astro";
-import ValueCard from "@/layouts/components/ValueCard.astro";
-import BusinessNeeds from "@/layouts/components/BusinessNeeds.astro";
-import ComparisonRow from "@/layouts/components/ComparisonRow.astro";
-import PricingSection from "@/layouts/components/PricingSection.astro";
-import ProcessCard from "@/layouts/components/ProcessCard.astro";
-import GradientBlob from "@/layouts/components/GradientBlob.astro";
-import BrandsCarousel from "@/layouts/components/BrandsCarousel.astro";
-import OurStory from "@/layouts/components/OurStory.astro";
-import Faq from "@/layouts/components/Faq.astro";
-import CallToAction from "@/layouts/components/CallToAction.astro";
-import VideoShowcase from "@/layouts/components/VideoShowcase.astro";
-import LeadGeneration from "@/layouts/components/LeadGeneration.astro";
-import config from "@/config/config.json";
-import { getListPage } from "@/lib/contentParser.astro";
-import { markdownify } from "@/lib/utils/textConverter";
-import Testimonial from "@/partials/Testimonial.astro";
-import Features from "@/partials/Features.astro";
-import type { Homepage } from "@/types";
-const homepage = await getListPage("homepage", "-index");
-const homepageData: Homepage = homepage.data;
 
-const { checklist_form_action } = config.params;
+const painPoints = [
+  "“Me han dicho que ahora tengo que pagar X €/mes por mantener mi web.”",
+  "“No sé si ese precio es normal o me están cobrando de más.”",
+  "“No tengo claro qué incluye el mantenimiento.”",
+  "“No sé qué pasa con mi web si dejo de pagar.”",
+  "“Quiero cambiar de proveedor, pero no sé si puedo llevarme la web.”",
+  "“No tengo acceso al CMS, al hosting, al dominio o a una copia de mi web.”",
+  "“La web que me hicieron con el Kit Digital es fea, lenta o directamente no funciona bien.”",
+  "“Tengo web, pero no aparece en Google ni me trae clientes.”",
+  "“No sé si necesito mantenimiento, SEO, una web nueva... o simplemente no hacer nada.”",
+];
+
+const valueCards = [
+  {
+    icon: "🔍",
+    title: "Analizamos tu web",
+    description:
+      "Revisamos el estado general de tu web y detectamos posibles problemas de funcionamiento, rendimiento, seguridad, estructura y mantenimiento.",
+  },
+  {
+    icon: "💶",
+    title: "Revisamos lo que estás pagando",
+    description:
+      "¿Te han enviado una propuesta para continuar con el mantenimiento? Mándanosla. Te ayudamos a entender qué incluye, qué servicios estás pagando y si la oferta tiene sentido para tu situación.",
+  },
+  {
+    icon: "🔑",
+    title: "Comprobamos si tienes el control",
+    description:
+      "Dominio, hosting, CMS, archivos, copias de seguridad... Si no sabes quién tiene cada cosa, lo averiguamos contigo. Y si quieres cambiar de proveedor, podemos ayudarte a preparar la transferencia.",
+  },
+  {
+    icon: "🛠️",
+    title: "Nos quedamos con tu web",
+    description:
+      "Una vez resuelta la situación, podemos encargarnos de que tu web siga funcionando. Mantenimiento desde 50 €/mes y sin permanencia.",
+  },
+];
+
+const paths = [
+  {
+    icon: "🛠️",
+    title: "SOLO QUIERO QUE FUNCIONE",
+    text: "Tu web está bien. Solo necesitas que alguien se ocupe de actualizaciones, seguridad, incidencias y mantenimiento.",
+    accent: "Desde 50 €/mes · Sin permanencia",
+    button: "VER MANTENIMIENTO →",
+    href: "#mantenimiento",
+  },
+  {
+    icon: "🔑",
+    title: "QUIERO RECUPERAR EL CONTROL",
+    text: "Quieres dejar a tu proveedor actual, pero no sabes cómo recuperar la web, el dominio, el hosting o los accesos. Te ayudamos a poner todo en orden y migrar tu web.",
+    button: "RECUPERAR MI WEB →",
+    href: "#analisis",
+  },
+  {
+    icon: "🎨",
+    title: "QUIERO UNA WEB QUE ESTÉ A LA ALTURA",
+    text: "La web del Kit Digital no representa tu negocio. Podemos rediseñarla completamente y mejorar diseño, estructura, velocidad y experiencia de usuario.",
+    accent: "Desde 200 €/mes · Permanencia mínima de 12 meses",
+    button: "VER REDISEÑO →",
+    href: "#analisis",
+  },
+  {
+    icon: "📈",
+    title: "QUIERO QUE MI WEB ME TRAIGA CLIENTES",
+    text: "Tener una web no significa aparecer en Google. Si quieres aumentar tu visibilidad y captar oportunidades desde buscadores, combinamos mantenimiento con SEO.",
+    accent: "Desde 500 €/mes · Permanencia mínima de 6 meses",
+    button: "VER SEO →",
+    href: "#analisis",
+  },
+];
+
+const faqs = [
+  {
+    question: "¿Tengo que seguir con la empresa que me hizo el Kit Digital?",
+    answer:
+      "No necesariamente. Dependerá de las condiciones de tu contratación y de cómo esté gestionada actualmente tu web. Si quieres cambiar, podemos revisar tu situación y ayudarte con el proceso.",
+  },
+  {
+    question: "¿Qué pasa si dejo de pagar el mantenimiento?",
+    answer:
+      "Depende de qué servicios estés pagando y de las condiciones de tu proveedor. Por eso es importante saber qué incluye realmente tu mantenimiento y qué elementos necesitas mantener activos. Si tienes dudas, analizamos tu caso.",
+  },
+  {
+    question: "¿Cómo sé si el precio que me han ofrecido es razonable?",
+    answer:
+      "No hay un precio único. Depende de si incluye hosting, soporte, actualizaciones, seguridad, modificaciones, SEO, desarrollo y otros servicios. Por eso preferimos revisar la propuesta antes de decirte si es cara o barata.",
+  },
+  {
+    question: "¿Puedo cambiar de proveedor?",
+    answer:
+      "En muchos casos, sí. Primero hay que identificar qué elementos componen tu web y quién tiene actualmente acceso a ellos. Podemos ayudarte a organizar la transferencia y migración.",
+  },
+  {
+    question: "¿Y si no tengo los accesos?",
+    answer:
+      "Podemos ayudarte a identificar qué accesos necesitas y qué información falta para poder gestionar o migrar la web.",
+  },
+  {
+    question: "¿Podéis mantener una web que no habéis creado vosotros?",
+    answer:
+      "Sí, siempre que técnicamente sea viable. Primero revisamos la web y su tecnología para determinar qué mantenimiento necesita.",
+  },
+  {
+    question: "¿Tengo que contratar SEO?",
+    answer:
+      "No. Si solo quieres que tu web funcione, puedes contratar únicamente mantenimiento. Desde 50 €/mes y sin permanencia. El SEO es un servicio diferente porque requiere trabajo continuo para intentar conseguir resultados.",
+  },
+  {
+    question: "¿Y si la web del Kit Digital es mala?",
+    answer:
+      "Podemos revisarla. Si simplemente necesita mantenimiento, te lo diremos. Si necesita mejoras, podemos plantearlas. Y si lo más sensato es rehacerla, podemos ofrecerte un rediseño completo.",
+  },
+  {
+    question: "¿El análisis gratuito me obliga a contratar?",
+    answer:
+      "No. La finalidad del análisis es que entiendas tu situación antes de tomar una decisión. Si decides continuar con nosotros, perfecto. Si no, al menos tendrás más información para decidir.",
+  },
+];
 ---
 
-<Base>
-  <!-- Banner -->
+<Base
+  lang="es"
+  title="Mantenimiento Kit Digital"
+  meta_title="Mantenimiento Kit Digital | Analiza tu web antes de pagar"
+  description="Analizamos gratis tu web y la propuesta de mantenimiento para ayudarte a decidir si necesitas seguir pagando, cambiar de proveedor o rediseñar tu web."
+>
   <section class="section-ph relative overflow-hidden">
     <div class="container relative">
-      <div class="absolute top-0 left-0 w-full">
-        <div class="h-100 w-full overflow-hidden -translate-y-10">
-          <canvas class="heroSporeCanvas w-full"></canvas>
-        </div>
-      </div>
-      <div class="row justify-center">
-        <div class="mb-20 text-center relative">
-          <h1
-            class="mb-8 lg:col-9 mx-auto text-h3 lg:text-h1 hasHighlight"
-            set:html={markdownify(homepageData.banner.title)}
-          />
-          <p class="mb-10 lg:col-6 mx-auto">{homepageData.banner.content}</p>
-          <div class="flex gap-4 justify-center items-center flex-wrap">
-            <a
-              class="btn btn-primary"
-              rel="noopener noreferrer"
-              href={homepageData.banner.button_primary.link}
-            >
-              {homepageData.banner.button_primary.label}
+      <div class="grid items-center gap-12 lg:grid-cols-[1.2fr_0.8fr]">
+        <div class="mx-auto max-w-3xl text-left lg:mx-0">
+          <p class="mb-4 text-xs font-semibold uppercase tracking-[0.22em] text-primary">
+            P1 — HERO
+          </p>
+          <h1 class="mb-6 text-h3 lg:text-h1">
+            ¿Se te acaba el mantenimiento del Kit Digital y no sabes si deberías
+            seguir pagando?
+          </h1>
+          <p class="mb-5 text-lg text-text">
+            <strong>
+              Antes de renovar, cambiar de proveedor o gastar dinero en una web
+              nueva, averigua qué tienes realmente, qué necesitas y si lo que te
+              están ofreciendo tiene sentido.
+            </strong>
+          </p>
+          <p class="mb-5 text-lg text-text">
+            Analizamos gratis tu web y, si quieres, la propuesta de mantenimiento
+            que te hayan enviado.
+          </p>
+          <p class="mb-8 text-lg text-text">
+            Te diremos qué haríamos nosotros en tu situación. Incluso si la
+            respuesta es que no necesitas contratarnos.
+          </p>
+          <div class="flex flex-wrap items-center gap-4">
+            <a class="btn btn-primary" href="#analisis">
+              ANÁLIZAR MI WEB GRATIS →
             </a>
-            <a
-              class="btn btn-outline"
-              rel="noopener noreferrer"
-              href={homepageData.banner.button_secondary.link}
-            >
-              {homepageData.banner.button_secondary.label}
+            <a class="btn btn-outline" href="#opciones">
+              VER QUÉ OPCIONES TENGO
             </a>
           </div>
+          <p class="mt-8 text-sm font-medium text-text">
+            Mantenimiento desde 50 €/mes · Sin permanencia
+          </p>
         </div>
-        <div class="col-12">
+
+        <div class="relative">
           <div
-            class="flex justify-center w-full perspective-near xl:perspective-dramatic"
+            class="relative rounded-[32px] border border-border bg-white/90 p-8 shadow-[0_30px_90px_rgba(12,18,35,0.12)] backdrop-blur-sm"
           >
-            <VideoShowcase />
+            <div class="mb-6 flex items-center justify-between">
+              <span class="rounded-full bg-primary/10 px-3 py-1 text-xs font-bold uppercase tracking-[0.18em] text-primary">
+                Review
+              </span>
+              <span class="text-sm text-muted">Sin compromiso</span>
+            </div>
+
+            <div class="space-y-4">
+              <div class="flex items-start gap-3 rounded-2xl bg-slate-50 p-3">
+                <span class="mt-0.5 text-xl">✅</span>
+                <div>
+                  <p class="font-semibold text-text">Qué tienes</p>
+                  <p class="text-sm text-text">Dominio, hosting, CMS y accesos</p>
+                </div>
+              </div>
+              <div class="flex items-start gap-3 rounded-2xl bg-slate-50 p-3">
+                <span class="mt-0.5 text-xl">⚠️</span>
+                <div>
+                  <p class="font-semibold text-text">Qué te cuesta</p>
+                  <p class="text-sm text-text">Precio, mantenimiento y riesgos</p>
+                </div>
+              </div>
+              <div class="flex items-start gap-3 rounded-2xl bg-slate-50 p-3">
+                <span class="mt-0.5 text-xl">📌</span>
+                <div>
+                  <p class="font-semibold text-text">Qué tiene sentido</p>
+                  <p class="text-sm text-text">Seguir, migrar o rediseñar</p>
+                </div>
+              </div>
+            </div>
           </div>
         </div>
       </div>
-    </div>
-    <div
-      class="absolute left-1/2 top-0 -translate-y-1/2 -translate-x-1/2 size-160 xl:size-300 -z-20 blur-2xl"
-      style="background: radial-gradient(circle, var(--color-primary) 0%, color-mix(in srgb, var(--color-primary) 78%, transparent) 20%, transparent 70%);"
-    >
-    </div>
-    <div class="absolute top-0 left-0 flex flex-col gap-6 -z-10">
-      <svg
-        xmlns="http://www.w3.org/2000/svg"
-        width="567"
-        height="558"
-        fill="none"
-      >
-        <g opacity=".5">
-          <g filter="url(#a-banner)" style="mix-blend-mode:plus-lighter"
-            ><path
-              fill="url(#b-banner)"
-              d="M-20.527-7.51 10.182-43l259.774 233.148-13.283 15.352-277.2-213.01Z"
-            ></path></g
-          >
-          <g filter="url(#c-banner)" style="mix-blend-mode:plus-lighter"
-            ><path
-              fill="url(#d-banner)"
-              d="M-52 13.659-20.788-25l267.328 224.459-13.502 16.722-285.04-202.522Z"
-            ></path></g
-          >
-          <g filter="url(#e-banner)" style="mix-blend-mode:plus-lighter"
-            ><path
-              fill="url(#f-banner)"
-              d="M-108.079-4.9-66.125-46l290.011 307.352-18.147 17.779-313.818-284.03Z"
-            ></path></g
-          >
-          <g filter="url(#g-banner)"
-            ><ellipse
-              cx="143"
-              cy="252.378"
-              fill="var(--color-primary-light)"
-              fill-opacity=".5"
-              rx="143"
-              ry="252.378"
-              transform="scale(-1 1) rotate(46.133 191.203 -117.756)"
-            ></ellipse></g
-          >
-        </g>
-        <defs>
-          <filter
-            id="a-banner"
-            width="338.484"
-            height="296.5"
-            x="-44.527"
-            y="-67"
-            color-interpolation-filters="sRGB"
-            filterUnits="userSpaceOnUse"
-            ><feFlood flood-opacity="0" result="BackgroundImageFix"
-            ></feFlood><feBlend
-              in="SourceGraphic"
-              in2="BackgroundImageFix"
-              result="shape"></feBlend><feGaussianBlur
-              result="effect1"
-              stdDeviation="12"></feGaussianBlur></filter
-          >
-          <filter
-            id="c-banner"
-            width="346.541"
-            height="289.181"
-            x="-76.001"
-            y="-49"
-            color-interpolation-filters="sRGB"
-            filterUnits="userSpaceOnUse"
-            ><feFlood flood-opacity="0" result="BackgroundImageFix"
-            ></feFlood><feBlend
-              in="SourceGraphic"
-              in2="BackgroundImageFix"
-              result="shape"></feBlend><feGaussianBlur
-              result="effect1"
-              stdDeviation="12"></feGaussianBlur></filter
-          >
-          <filter
-            id="e-banner"
-            width="379.965"
-            height="373.131"
-            x="-132.079"
-            y="-70"
-            color-interpolation-filters="sRGB"
-            filterUnits="userSpaceOnUse"
-            ><feFlood flood-opacity="0" result="BackgroundImageFix"
-            ></feFlood><feBlend
-              in="SourceGraphic"
-              in2="BackgroundImageFix"
-              result="shape"></feBlend><feGaussianBlur
-              result="effect1"
-              stdDeviation="12"></feGaussianBlur></filter
-          >
-          <filter
-            id="g-banner"
-            width="914.454"
-            height="906.103"
-            x="-348.178"
-            y="-349.061"
-            color-interpolation-filters="sRGB"
-            filterUnits="userSpaceOnUse"
-            ><feFlood flood-opacity="0" result="BackgroundImageFix"
-            ></feFlood><feBlend
-              in="SourceGraphic"
-              in2="BackgroundImageFix"
-              result="shape"></feBlend><feGaussianBlur
-              result="effect1"
-              stdDeviation="125"></feGaussianBlur></filter
-          >
-          <linearGradient
-            id="b-banner"
-            x1="-5.173"
-            x2="258.744"
-            y1="-25.255"
-            y2="203.106"
-            gradientUnits="userSpaceOnUse"
-            ><stop stop-color="var(--color-primary)"></stop><stop
-              offset="1"
-              stop-color="var(--color-primary)"
-              stop-opacity="0"></stop></linearGradient
-          >
-          <linearGradient
-            id="d-banner"
-            x1="-36.394"
-            x2="235.144"
-            y1="-5.671"
-            y2="213.574"
-            gradientUnits="userSpaceOnUse"
-            ><stop stop-color="var(--color-primary)"></stop><stop
-              offset="1"
-              stop-color="var(--color-primary)"
-              stop-opacity="0"></stop></linearGradient
-          >
-          <linearGradient
-            id="f-banner"
-            x1="-87.102"
-            x2="208.568"
-            y1="-25.45"
-            y2="276.359"
-            gradientUnits="userSpaceOnUse"
-            ><stop stop-color="var(--color-primary)"></stop><stop
-              offset="1"
-              stop-color="var(--color-primary)"
-              stop-opacity="0"></stop></linearGradient
-          >
-        </defs>
-      </svg>
     </div>
   </section>
-  <hr
-    class="h-px bg-linear-to-r from-transparent from-10% via-white/50 to-90% to-transparent border-0"
-  />
 
-  <!-- Main Features -->
-  {
-    homepageData.main_features.enable && (
-      <section class="section pt-30 xl:pt-37">
-        <div class="container">
-          <div class="section-container">
-            <div class="section-intro centralize">
-              <h2
-                class="title hasHighlight  "
-                set:html={markdownify(homepageData.main_features.title)}
-              />
-              <p class="subtitle">{homepageData.main_features.content}</p>
-            </div>
-            <div class="section-content">
-              <div class="feature-items-group mb-9">
-                {homepageData.main_features.items
-                  .slice(0, 3)
-                  .map((text: string) => (
-                    <div class="bg-body border border-border px-4 w-full py-2.5 rounded-full flex items-center justify-center relative z-10 gap-x-2">
-                      <svg
-                        class="shrink-0"
-                        width="20"
-                        height="20"
-                        viewBox="0 0 20 20"
-                        fill="none"
-                        xmlns="http://www.w3.org/2000/svg"
-                      >
-                        <path
-                          d="M9.99999 1.04163C14.9476 1.04163 18.9583 5.05241 18.9583 9.99996C18.9583 14.9475 14.9476 18.9583 9.99999 18.9583C5.05244 18.9583 1.04166 14.9475 1.04166 9.99996C1.04166 5.05241 5.05244 1.04163 9.99999 1.04163ZM8.02571 6.8538C7.69841 6.58685 7.2159 6.6057 6.9108 6.91077C6.60581 7.21587 6.5869 7.6984 6.85383 8.02568L6.9108 8.08915L8.82157 9.99996L6.91161 11.9108C6.5863 12.2362 6.58619 12.7638 6.91161 13.0891C7.23705 13.4143 7.76464 13.4145 8.09 13.0891L9.99999 11.1784L11.91 13.0891L11.9735 13.1461C12.3007 13.413 12.7832 13.394 13.0884 13.0891C13.3934 12.7842 13.4128 12.3015 13.1462 11.9742L13.0884 11.9108L11.1776 9.99996L13.0892 8.08915L13.1462 8.02568C13.4131 7.69839 13.3942 7.21587 13.0892 6.91077C12.7841 6.6057 12.3016 6.58685 11.9742 6.8538L11.9108 6.91077L9.99999 8.82154L8.08918 6.91077L8.02571 6.8538Z"
-                          fill="var(--color-secondary)"
-                        />
-                      </svg>
-                      <span class="font-semibold text-white text-lg">
-                        {text}
-                      </span>
-                    </div>
-                  ))}
-              </div>
-              <div class="feature-items-group">
-                {homepageData.main_features.items
-                  .slice(3)
-                  .map((text: string) => (
-                    <div class="bg-body border border-border px-4 w-full py-2.5 rounded-full flex items-center justify-center relative z-10 gap-x-2">
-                      <svg
-                        class="shrink-0"
-                        width="20"
-                        height="20"
-                        viewBox="0 0 20 20"
-                        fill="none"
-                        xmlns="http://www.w3.org/2000/svg"
-                      >
-                        <path
-                          d="M9.99999 1.04163C14.9476 1.04163 18.9583 5.05241 18.9583 9.99996C18.9583 14.9475 14.9476 18.9583 9.99999 18.9583C5.05244 18.9583 1.04166 14.9475 1.04166 9.99996C1.04166 5.05241 5.05244 1.04163 9.99999 1.04163ZM8.02571 6.8538C7.69841 6.58685 7.2159 6.6057 6.9108 6.91077C6.60581 7.21587 6.5869 7.6984 6.85383 8.02568L6.9108 8.08915L8.82157 9.99996L6.91161 11.9108C6.5863 12.2362 6.58619 12.7638 6.91161 13.0891C7.23705 13.4143 7.76464 13.4145 8.09 13.0891L9.99999 11.1784L11.91 13.0891L11.9735 13.1461C12.3007 13.413 12.7832 13.394 13.0884 13.0891C13.3934 12.7842 13.4128 12.3015 13.1462 11.9742L13.0884 11.9108L11.1776 9.99996L13.0892 8.08915L13.1462 8.02568C13.4131 7.69839 13.3942 7.21587 13.0892 6.91077C12.7841 6.6057 12.3016 6.58685 11.9742 6.8538L11.9108 6.91077L9.99999 8.82154L8.08918 6.91077L8.02571 6.8538Z"
-                          fill="var(--color-secondary)"
-                        />
-                      </svg>
-                      <span class="font-semibold text-white text-lg">
-                        {text}
-                      </span>
-                    </div>
-                  ))}
-              </div>
-            </div>
+  <section class="section-sm" id="opciones">
+    <div class="container">
+      <div class="mx-auto max-w-4xl text-center">
+        <p class="mb-3 text-xs font-semibold uppercase tracking-[0.22em] text-primary">
+          P2 — PAIN POINTS
+        </p>
+        <h2 class="mb-5 text-h3 lg:text-h2">
+          El Kit Digital se acaba. Las dudas empiezan.
+        </h2>
+        <p class="mb-8 text-lg text-text">
+          Puede que estés en alguna de estas:
+        </p>
+      </div>
+
+      <div class="mx-auto grid max-w-5xl gap-4 md:grid-cols-2">
+        {painPoints.map((item) => (
+          <div class="rounded-2xl border border-border bg-white p-4 shadow-sm">
+            <p class="text-base font-medium text-text">{item}</p>
+          </div>
+        ))}
+      </div>
+
+      <div class="mx-auto mt-12 max-w-4xl rounded-3xl border border-border bg-slate-50 p-8 text-center">
+        <h3 class="mb-3 text-h4">Y no pasa nada por no saberlo.</h3>
+        <p class="mb-4 text-lg text-text">
+          No tienes por qué entender de WordPress, hosting, dominios, SEO o servidores.
+        </p>
+        <p class="text-lg font-semibold text-text">
+          Solo necesitas saber qué tienes, qué estás pagando y qué opciones tienes.
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <section class="section-sm">
+    <div class="container">
+      <div class="mx-auto max-w-4xl text-center">
+        <p class="mb-3 text-xs font-semibold uppercase tracking-[0.22em] text-primary">
+          P3 — PROPUESTA DE VALOR
+        </p>
+        <h2 class="mb-5 text-h3 lg:text-h2">Primero entiende. Después decide.</h2>
+        <p class="mb-8 text-lg text-text">
+          No vamos a decirte que cambies de proveedor porque sí.
+        </p>
+        <p class="mb-12 text-lg text-text">
+          Tampoco vamos a venderte SEO si solo necesitas que tu web funcione.
+        </p>
+        <p class="mb-8 text-lg font-semibold text-text">
+          Primero analizamos tu situación. Después vemos qué tiene sentido.
+        </p>
+      </div>
+
+      <div class="grid gap-6 lg:grid-cols-2">
+        {valueCards.map((card) => (
+          <article class="rounded-[28px] border border-border bg-white p-8 shadow-sm">
+            <div class="mb-5 text-4xl">{card.icon}</div>
+            <h3 class="mb-4 text-h5">{card.title}</h3>
+            <p class="text-base leading-relaxed text-text">{card.description}</p>
+          </article>
+        ))}
+      </div>
+
+      <div class="mt-10 text-center">
+        <p class="text-lg font-medium text-text">
+          Mantenimiento desde 50 €/mes y sin permanencia.
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <section class="section-sm" id="mantenimiento">
+    <div class="container">
+      <div class="mx-auto max-w-4xl text-center">
+        <p class="mb-3 text-xs font-semibold uppercase tracking-[0.22em] text-primary">
+          P4 — “¿Y DESPUÉS QUÉ?”
+        </p>
+        <h2 class="mb-5 text-h3 lg:text-h2">
+          Dependiendo de tu situación, hay cuatro caminos.
+        </h2>
+        <p class="mb-12 text-lg text-text">
+          No todas las webs del Kit Digital necesitan lo mismo.
+        </p>
+      </div>
+
+      <div class="grid gap-6 lg:grid-cols-2">
+        {paths.map((item) => (
+          <article class="rounded-[28px] border border-border bg-white p-8 shadow-sm">
+            <div class="mb-4 text-4xl">{item.icon}</div>
+            <h3 class="mb-4 text-h5">{item.title}</h3>
+            <p class="mb-4 text-base leading-relaxed text-text">{item.text}</p>
+            {item.accent && (
+              <p class="mb-5 text-sm font-semibold text-primary">{item.accent}</p>
+            )}
+            <a class="inline-flex text-sm font-semibold uppercase tracking-[0.12em] text-primary" href={item.href}>
+              {item.button}
+            </a>
+          </article>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <section class="section-sm" id="analisis">
+    <div class="container">
+      <div class="mx-auto max-w-5xl rounded-[32px] border border-border bg-slate-50 p-8 lg:p-12">
+        <div class="text-center">
+          <p class="mb-3 text-xs font-semibold uppercase tracking-[0.22em] text-primary">
+            P5 — ANÁLISIS GRATUITO
+          </p>
+          <h2 class="mb-6 text-h3 lg:text-h2">
+            ¿No sabes cuál de las cuatro necesitas?
+          </h2>
+        </div>
+
+        <div class="mt-8 rounded-3xl border border-border bg-white p-8 shadow-sm">
+          <h3 class="mb-4 text-h4">Perfecto. Para eso está el análisis.</h3>
+          <p class="mb-6 text-lg text-text">
+            Envíanos tu web y, si la tienes, la propuesta que te haya hecho tu proveedor para continuar con el mantenimiento.
+          </p>
+
+          <div class="grid gap-4 md:grid-cols-2">
+            <ul class="space-y-3 text-base text-text">
+              <li>✓ Qué tienes actualmente</li>
+              <li>✓ Qué parece que necesitas realmente</li>
+              <li>✓ Qué problemas vemos en tu web</li>
+              <li>✓ Qué incluye la propuesta que te han hecho</li>
+            </ul>
+            <ul class="space-y-3 text-base text-text">
+              <li>✓ Qué cosas merece la pena mantener</li>
+              <li>✓ Qué cosas podrías no necesitar</li>
+              <li>✓ Qué opciones tienes si quieres cambiar</li>
+            </ul>
+          </div>
+
+          <div class="mt-8 space-y-4 text-lg text-text">
+            <p>
+              Y después decides tú. Si creemos que la oferta que tienes es buena,
+              <strong>te lo diremos.</strong>
+            </p>
+            <p>
+              Si creemos que puedes conseguir lo mismo por menos,
+              <strong>también.</strong>
+            </p>
+            <p>
+              Si tu web necesita algo más,
+              <strong>te explicaremos qué y por qué.</strong>
+            </p>
+          </div>
+
+          <div class="mt-10 text-center">
+            <h3 class="mb-5 text-h4">Sin compromiso. Sin presión. Sin venderte algo porque sí.</h3>
+            <a class="btn btn-primary" href="#cta-final">
+              QUIERO MI ANÁLISIS GRATIS →
+            </a>
           </div>
         </div>
-      </section>
-    )
-  }
+      </div>
+    </div>
+  </section>
 
-  <!-- Value Proposition -->
-  {
-    homepageData.value_props.enable && (
-      <section class="section relative overflow-hidden">
-        <div class="container">
-          <div class="section-container">
-            <div class="section-intro centralize">
-              <h2
-                class="title hasHighlight  "
-                set:html={markdownify(homepageData.value_props.title)}
-              />
-              <p class="subtitle">{homepageData.value_props.content}</p>
-            </div>
-            <div class="section-content">
-              <div class="grid sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-2 mb-9">
-                {homepageData.value_props.items.map((item: any) => (
-                  <ValueCard
-                    logo={item.logo}
-                    title={item.title}
-                    list={item.list}
-                  />
-                ))}
-              </div>
-            </div>
-          </div>
+  <section class="section-sm">
+    <div class="container">
+      <div class="mx-auto max-w-4xl text-center">
+        <p class="mb-3 text-xs font-semibold uppercase tracking-[0.22em] text-primary">
+          P6 — LA CONTINUIDAD
+        </p>
+        <h2 class="mb-6 text-h3 lg:text-h2">
+          El Kit Digital termina. Tu web no debería quedarse abandonada.
+        </h2>
+      </div>
+
+      <div class="mx-auto mt-8 max-w-4xl space-y-5 text-lg text-text">
+        <p>La ayuda puede terminar.</p>
+        <p>El mantenimiento incluido puede terminar.</p>
+        <p>Tu proveedor puede cambiar.</p>
+        <p>Pero tu web sigue siendo una herramienta de tu negocio.</p>
+      </div>
+
+      <div class="mx-auto mt-10 max-w-5xl rounded-[28px] border border-border bg-white p-8 shadow-sm">
+        <p class="mb-5 text-xl font-semibold text-text">
+          Por eso nuestro objetivo no es hacerte una intervención puntual y desaparecer.
+        </p>
+        <p class="mb-5 text-lg text-text">
+          <strong>
+            Queremos que, una vez puesta en orden, podamos seguir ocupándonos de ella.
+          </strong>
+        </p>
+        <p class="mb-5 text-lg text-text">
+          Puedes llegar a nosotros porque necesitas:
+        </p>
+        <p class="text-lg font-semibold text-primary">
+          recuperarla → migrarla → rediseñarla → posicionarla → mantenerla.
+        </p>
+
+        <div class="mt-8 rounded-2xl bg-slate-50 p-5 text-center">
+          <p class="text-lg text-text">
+            Y si todo lo que necesitas es mantenimiento, mejor todavía.
+          </p>
+          <p class="mt-2 text-lg font-semibold text-primary">Desde 50 €/mes. Sin permanencia.</p>
         </div>
-        <GradientBlob />
-      </section>
-    )
-  }
 
-  <!-- Features -->
-  {
-    homepageData.our_features.enable && (
-      <Features our_features={homepageData.our_features} />
-    )
-  }
-
-  <!-- Business Needs -->
-  <BusinessNeeds />
-
-  <!-- Comparison -->
-  <ComparisonRow />
-
-  <!-- Testimonial Quote -->
-  {
-    homepageData.testimonial_quote.enable && (
-      <section class="section overflow-hidden">
-        <div class="container">
-          <div class="section-container">
-            <div class="section-intro centralize">
-              <h2
-                class="title hasHighlight  "
-                set:html={markdownify(homepageData.testimonial_quote.title)}
-              />
-            </div>
-            <div class="section-content">
-              <hr class="h-px bg-linear-to-r from-transparent from-5% via-white/40 to-95% to-transparent border-0" />
-              <div class="relative max-w-220 mx-auto">
-                <blockquote class="text-center text-h6 text-white p-6 xl:p-10 xl:px-15 border-x border-text/20">
-                  "{homepageData.testimonial_quote.quote}"
-                </blockquote>
-                <div class="size-2 bg-white absolute left-0 top-0 -translate-x-1/2 -translate-y-1/2" />
-                <div class="size-2 bg-white absolute right-0 top-0 translate-x-1/2 -translate-y-1/2" />
-                <div class="size-2 bg-white absolute left-0 bottom-0 -translate-x-1/2 translate-y-1/2" />
-                <div class="size-2 bg-white absolute right-0 bottom-0 translate-x-1/2 translate-y-1/2" />
-              </div>
-              <hr class="h-px bg-linear-to-r from-transparent from-5% via-white/40 to-95% to-transparent border-0" />
-            </div>
-          </div>
+        <div class="mt-8 text-center">
+          <a class="btn btn-primary" href="#cta-final">
+            QUIERO QUE OS ENCARGUÉIS DE MI WEB →
+          </a>
         </div>
-      </section>
-    )
-  }
+      </div>
+    </div>
+  </section>
 
-  <!-- Our Partners -->
-  <BrandsCarousel />
+  <section class="section-sm">
+    <div class="container">
+      <div class="mx-auto max-w-4xl text-center">
+        <p class="mb-3 text-xs font-semibold uppercase tracking-[0.22em] text-primary">
+          P7 — FAQ
+        </p>
+        <h2 class="mb-10 text-h3 lg:text-h2">Preguntas que probablemente tienes</h2>
+      </div>
 
-  <!-- Single Testimonial -->
-  {
-    homepageData.single_testimonial.enable && (
-      <section class="section relative max-lg:overflow-hidden">
-        <div class="container">
-          <div class="section-container">
-            <div class="section-content">
-              <div class="row g-4 items-center">
-                <div class="lg:col-5">
-                  <div class="flex flex-col">
-                    {homepageData.single_testimonial.stats.map(
-                      (stat: any, i: number) => (
-                        <div
-                          class={`blob-message relative z-${i + 1} ${i === 1 ? "lg:w-10/12" : ""}`}
-                        >
-                          <span class="font-semibold text-white">
-                            {stat.value}
-                          </span>{" "}
-                          {stat.label}
-                        </div>
-                      ),
-                    )}
-                  </div>
-                </div>
-                <div class="lg:col-7 max-lg:mt-10">
-                  <div class="rounded-4xl corner-squircle bg-light px-7 py-10">
-                    <div class="text-white">
-                      <svg
-                        width="45"
-                        height="28"
-                        viewBox="0 0 45 28"
-                        fill="none"
-                        xmlns="http://www.w3.org/2000/svg"
-                      >
-                        <path
-                          d="M15.3955 0V10.9561H24.8691L16.5791 28H0L13.0264 0H15.3955ZM36.7109 0V10.9561H45L36.7109 28H21.3154L34.3418 0H36.7109Z"
-                          fill="currentColor"
-                        />
-                      </svg>
-                    </div>
-                    <blockquote class="mt-10 text-h6 text-white">
-                      {homepageData.single_testimonial.testimonial.quote}
-                    </blockquote>
-                    <div class="mt-12.5 flex items-center">
-                      <div class="text-text-dark">
-                        <ImageMod
-                          height={50}
-                          width={50}
-                          class="rounded-full size-12"
-                          src={
-                            homepageData.single_testimonial.testimonial.avatar
-                          }
-                          alt={homepageData.single_testimonial.testimonial.name}
-                        />
-                      </div>
-                      <div class="ml-2.5">
-                        <h3 class="text-base font-primary font-semibold">
-                          {homepageData.single_testimonial.testimonial.name}
-                        </h3>
-                        <p class="text-text-dark">
-                          {homepageData.single_testimonial.testimonial.company}
-                        </p>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
+      <div class="mx-auto max-w-5xl space-y-4">
+        {faqs.map((item) => (
+          <div class="rounded-2xl border border-border bg-white p-6 shadow-sm">
+            <h3 class="mb-2 text-lg font-semibold text-text">{item.question}</h3>
+            <p class="text-base leading-relaxed text-text">{item.answer}</p>
           </div>
-        </div>
-        <div class="absolute top-0 lg:bottom-0 grid place-items-center size-full lg:translate-y-20 -z-10">
-          <div class="size-180 xl:size-300 bg-radial from-primary-light/60 to-transparent from-0% to-70% rounded-full" />
-          <div class="absolute bottom-0 left-1/2 -translate-x-1/2 translate-y-1/2 w-180">
-            <div class="h-100 w-full overflow-hidden">
-              <canvas class="heroSporeCanvas w-full" />
-            </div>
-          </div>
-        </div>
-      </section>
-    )
-  }
+        ))}
+      </div>
+    </div>
+  </section>
 
-  <!-- Growth Process -->
-  {
-    homepageData.growth_process.enable && (
-      <section class="section-box max-lg:overflow-hidden pb-16 xl:pb-19 bg-transparent relative isolate overflow-hidden">
-        <div class="container">
-          <div class="section-container">
-            <div class="section-intro centralize">
-              <h2
-                class="title hasHighlight  "
-                set:html={markdownify(homepageData.growth_process.title)}
-              />
-            </div>
-            <div class="section-content">
-              <div class="grid lg:grid-cols-2 xl:grid-cols-3 gap-8 xl:gap-16">
-                {homepageData.growth_process.items.map((item: any) => (
-                  <ProcessCard
-                    logo={item.logo}
-                    title={item.title}
-                    content={item.content}
-                  />
-                ))}
-              </div>
-              {homepageData.growth_process.button.enable && (
-                <div class="flex justify-center mt-10 xl:mt-18">
-                  <a
-                    href={homepageData.growth_process.button.link}
-                    class="btn btn-primary"
-                  >
-                    {homepageData.growth_process.button.label}
-                  </a>
-                </div>
-              )}
-            </div>
-          </div>
+  <section class="section-sm pb-20" id="cta-final">
+    <div class="container">
+      <div class="mx-auto max-w-5xl rounded-[32px] border border-border bg-primary px-8 py-12 text-white shadow-[0_30px_90px_rgba(27,74,110,0.2)] lg:px-12">
+        <div class="text-center">
+          <p class="mb-3 text-xs font-semibold uppercase tracking-[0.22em] text-white/80">
+            P8 — CTA FINAL
+          </p>
+          <h2 class="mb-6 text-h3 lg:text-h2 text-white">
+            No renueves algo que no entiendes.
+          </h2>
         </div>
-        <div class="absolute inset-x-0 top-0 -z-10">
-          <svg
-            class="w-full"
-            viewBox="0 0 1920 1099"
-            fill="none"
-            xmlns="http://www.w3.org/2000/svg"
+
+        <div class="mx-auto max-w-4xl space-y-5 text-lg text-white/90">
+          <p>
+            Si se te acaba el mantenimiento del Kit Digital,
+            <strong class="text-white">no tienes por qué aceptar la primera propuesta que te pongan delante.</strong>
+          </p>
+          <p>Primero averigua:</p>
+          <p class="text-xl font-semibold text-white">
+            qué tienes · qué necesitas · qué estás pagando · y qué alternativas tienes.
+          </p>
+        </div>
+
+        <div class="mt-10 text-center">
+          <p class="mb-4 text-xl font-semibold text-white">
+            Nosotros podemos encargarnos de tu web después.
+          </p>
+          <p class="mb-6 text-3xl font-bold text-white">Hablemos de tu caso.</p>
+          <p class="mb-8 text-lg text-white/80">Análisis gratuito y sin compromiso.</p>
+          <a
+            class="btn border border-white bg-white/10 text-white hover:bg-white hover:text-primary"
+            href="#analisis"
           >
-            <path
-              d="M960 1.5C1224.88 1.5 1464.62 62.943 1638.08 162.205C1811.58 261.491 1918.5 398.425 1918.5 549.356C1918.5 700.287 1811.58 837.222 1638.08 936.508C1464.62 1035.77 1224.88 1097.21 960 1097.21C695.116 1097.21 455.383 1035.77 281.923 936.508C108.42 837.222 1.50012 700.287 1.5 549.356C1.5 398.425 108.42 261.491 281.923 162.205C455.383 62.943 695.116 1.5 960 1.5Z"
-              fill="black"
-              stroke="url(#paint0_linear_proc)"
-              stroke-width="3"
-            />
-            <defs>
-              <linearGradient
-                id="paint0_linear_proc"
-                x1="960"
-                y1="0"
-                x2="960"
-                y2="84.3521"
-                gradientUnits="userSpaceOnUse"
-              >
-                <>
-                  <stop stop-color="var(--color-primary-light)" />
-                  <stop offset="1" stop-color="var(--color-body)" />
-                </>
-              </linearGradient>
-            </defs>
-          </svg>
+            ANALIZAR MI WEB GRATIS →
+          </a>
         </div>
-        <div class="absolute inset-0 grid place-items-center size-full -z-10">
-          <div class="size-225 bg-radial from-primary-light/30 to-transparent from-0% to-70% rounded-full" />
+
+        <div class="mt-10 border-t border-white/20 pt-8 text-center">
+          <p class="text-2xl font-bold text-white">MantenimientoKitDigital.com</p>
+          <p class="mt-3 text-lg text-white/80">
+            Tu web. Tus accesos. Tus decisiones.
+          </p>
         </div>
-      </section>
-    )
-  }
-
-  <!-- Our Thought / CEO Letter -->
-  <OurStory />
-
-  <!-- Integrations -->
-  {
-    homepageData.integrations.enable && (
-      <section class="section relative isolate max-md:overflow-hidden">
-        <div class="container-sm">
-          <div class="section-container">
-            <div class="section-intro centralize">
-              <h2
-                class="title hasHighlight  "
-                set:html={markdownify(homepageData.integrations.title)}
-              />
-            </div>
-            <div class="section-content">
-              <div class="flex items-center justify-center flex-wrap [&>div]:-ml-5">
-                {homepageData.integrations.items.map((item: any) => (
-                  <div class="size-35 bg-text-light/10 backdrop-blur-xl rounded-full grid place-items-center">
-                    <ImageMod
-                      src={item.image}
-                      alt={item.alt}
-                      class="max-h-14 object-contain"
-                    />
-                  </div>
-                ))}
-              </div>
-            </div>
-          </div>
-        </div>
-        <div class="absolute inset-0 grid place-items-center size-full -z-10">
-          <div class="size-180 xl:size-225 bg-radial from-primary-light/40 to-transparent from-0% to-70% rounded-full" />
-        </div>
-      </section>
-    )
-  }
-
-  <!-- Lead Generation -->
-  {
-    homepageData.lead_generation.enable && (
-      <LeadGeneration lead_generation={homepageData.lead_generation} />
-    )
-  }
-
-  {
-    homepageData.pricing.enable && (
-      <PricingSection
-        title={homepageData.pricing.title}
-        content={homepageData.pricing.content}
-      />
-    )
-  }
-
-  <Testimonial />
-
-  <Faq />
-
-  <CallToAction />
+      </div>
+    </div>
+  </section>
 </Base>
